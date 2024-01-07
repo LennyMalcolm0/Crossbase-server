@@ -1,0 +1,56 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Profile {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String @unique
+  firstName String
+  lastName  String
+}
+
+model Store {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @unique
+  type      StoreType
+  storeUrl  String
+  key       String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+
+  threads Thread[]
+}
+
+enum StoreType {
+  SHOPIFY
+  AMAZON
+  WOO_COMMERCE
+  GUMROAD
+}
+
+enum Role {
+  user
+  assistant
+}
+
+type Message {
+  role    Role
+  content String
+}
+
+model Thread {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @unique
+  title     String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+
+  store   Store  @relation(fields: [storeId], references: [id])
+  storeId String @db.ObjectId
+}
