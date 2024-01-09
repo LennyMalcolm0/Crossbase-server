@@ -40,14 +40,14 @@ export const updateStoreUrlSchema = Joi.object({
     newStoreUrl: Joi.string().required(),
 });
 
-// Thread schemas
+// Insight schemas
 export const messageSchema = Joi.object({
     role: Joi.string().required(),
     content: Joi.string().required()
 });
 export const promptSchema = Joi.object({
     storeId: Joi.string().required(),
-    threadId: Joi.string().optional(),
+    insightId: Joi.string().optional(),
     title: Joi.string().required(),
     conversation: Joi.array()
         .items(messageSchema)

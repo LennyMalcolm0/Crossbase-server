@@ -23,7 +23,7 @@ model Store {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 
-  threads Thread[]
+  insights Insight[]
 }
 
 enum StoreType {
@@ -43,11 +43,12 @@ type Message {
   content String
 }
 
-model Thread {
+model Insight {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   userId    String    @unique
   title     String
   messages  Message[]
+  pinned    Boolean
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 

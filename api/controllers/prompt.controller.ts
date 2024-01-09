@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { openai } from "../lib";
-import { updateThread, createThread } from "./thread.controller";
+import { updateInsight, createInsight } from "./insight.controller";
 
 type Prompt = {
     title: any;
@@ -8,7 +8,7 @@ type Prompt = {
         user: string;
         assistant: string;
     }[];
-    threadId?: string;
+    insightId?: string;
     storeId?: string;
 }
 
@@ -18,7 +18,7 @@ const generateResponse = async (req: Request, res: Response) => {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    const { question, conversation, threadId, storeId } = req.body;
+    const { question, conversation, insightId, storeId } = req.body;
     const newQuestion = { role: "user", content: question };
 
     const messages = [
@@ -61,13 +61,13 @@ const generateResponse = async (req: Request, res: Response) => {
         messages: messages.slice(2) 
     };
 
-    if (threadId) {
-        payload.threadId = threadId;
-        await updateThread(req, payload);
+    if (insightId) {
+        payload.insightId = insightId;
+        await updateInsight(req, payload);
     }
 
     payload.storeId = storeId
-    await createThread(req, payload);
+    await createInsight(req, payload);
 }
 
 module.exports = { generateResponse }

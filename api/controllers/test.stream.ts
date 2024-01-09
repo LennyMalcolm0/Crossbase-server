@@ -7,6 +7,8 @@ export const testStream = async (req: Request, res: Response) => {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
+    const { prompt } = req.body;
+
     const messages: any = [
         {
             role: "system",
@@ -14,21 +16,22 @@ export const testStream = async (req: Request, res: Response) => {
         },
         {
             role: "user",
-            content: "What lead to the fall of the Roman Empire?",
+            content: prompt,
         }
     ];
 
     const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: messages,
-        max_tokens: 100,
+        max_tokens: 200,
         temperature: 0,
-        stream: true
+        stream: true,
     });
 
     for await (const chunk of response) {
         const [choice] = chunk.choices;
         const { content } = choice.delta;
+        // console.log(content)
         if (content) {
             res.write(`${content}`);
         }
@@ -36,3 +39,5 @@ export const testStream = async (req: Request, res: Response) => {
 
     res.end();
 }
+
+// Name all the gods of the Greek Mythology and their roles

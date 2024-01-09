@@ -5,7 +5,7 @@ import { prisma, validateUser } from "./lib";
 import { 
   profileRoutes, 
   storeRoutes, 
-  threadRoutes 
+  insightRoutes 
 } from "./routes";
 import { testStream } from "./controllers/test.stream";
 
@@ -31,15 +31,14 @@ app.get(
       });
   }
 );
-app.use("/stream", testStream);
+app.use("/api/stream", testStream);
 
 app.use("/api/profile", profileRoutes);
 app.use("/api/stores", storeRoutes);
-app.use("/api/threads", threadRoutes);
+app.use("/api/insights", insightRoutes);
 
 prisma.$connect;
 
-// app.listen(process.env.PORT);
 const port = process.env.PORT;
 
 try {

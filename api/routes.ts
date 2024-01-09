@@ -19,10 +19,10 @@ import {
     deleteStore 
 } from "./controllers/store.controller";
 import { 
-    getThreads, 
-    getThread, 
-    deleteThread 
-} from "./controllers/thread.controller";
+    getInsights, 
+    getInsight, 
+    deleteInsight 
+} from "./controllers/insight.controller";
 
 /** Express router to manage profile routes */
 export const profileRoutes = Router();
@@ -53,10 +53,11 @@ storeRoutes.patch("/:storeId",
 storeRoutes.delete("/:storeId", deleteStore);
 
 
-/** Express router to manage thread routes */
-export const threadRoutes = Router();
+/** Express router to manage insight routes */
+export const insightRoutes = Router();
 
-threadRoutes.get("/", getThreads);
-threadRoutes.get("/:threadId", getThread);
-threadRoutes.delete("/:threadId", deleteThread);
+insightRoutes.get("/:storeId", getInsights);
+insightRoutes.get("/:insightId", getInsight);
+insightRoutes.get("/pin/:insightId/:value", getInsight);
+insightRoutes.delete("/:insightId", deleteInsight);
 
