@@ -4,7 +4,8 @@ import {
     createProfileSchema, 
     updateProfileSchema, 
     createStoreSchema, 
-    updateStoreUrlSchema 
+    updateStoreUrlSchema,
+    promptSchema
 } from "./dtos/joi.validators";
 import { 
     getProfile, 
@@ -21,8 +22,10 @@ import {
 import { 
     getInsights, 
     getInsight, 
+    pinInsight,
     deleteInsight 
 } from "./controllers/insight.controller";
+import { generateResponse } from "./controllers/prompt.controller";
 
 /** Express router to manage profile routes */
 export const profileRoutes = Router();
@@ -56,8 +59,12 @@ storeRoutes.delete("/:storeId", deleteStore);
 /** Express router to manage insight routes */
 export const insightRoutes = Router();
 
-insightRoutes.get("/:storeId", getInsights);
+insightRoutes.post("/question", 
+    schemaValidator(promptSchema), 
+    generateResponse
+);
+insightRoutes.get("/:storeId/all", getInsights);
 insightRoutes.get("/:insightId", getInsight);
-insightRoutes.get("/pin/:insightId/:value", getInsight);
+insightRoutes.get("/pin/:insightId/:value", pinInsight);
 insightRoutes.delete("/:insightId", deleteInsight);
 

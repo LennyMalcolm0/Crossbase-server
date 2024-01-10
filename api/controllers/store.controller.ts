@@ -12,7 +12,8 @@ export const getStores = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 storeUrl: true,
-                type: true
+                type: true,
+                updatedAt: true
             }
         });
         
@@ -35,7 +36,8 @@ export const getStore = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 storeUrl: true,
-                type: true
+                type: true,
+                updatedAt: true
             }
         });
     
@@ -58,12 +60,9 @@ export const createStore = async (req: Request, res: Response) => {
                 userId: currentUser.uid,
                 ...payload
             },
-            select: {
-                id: true,
-                storeUrl: true,
-                type: true
-            }
         });
+
+        delete (store as any).key
     
         res.status(200).send(store);
     } catch (error) {
@@ -91,7 +90,8 @@ export const updateStoreUrl = async (req: Request, res: Response) => {
             select: {
                 id: true,
                 storeUrl: true,
-                type: true
+                type: true,
+                updatedAt: true
             }
            });
     

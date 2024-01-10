@@ -12,7 +12,7 @@ type Prompt = {
     storeId?: string;
 }
 
-const generateResponse = async (req: Request, res: Response) => {
+export const generateResponse = async (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
@@ -26,10 +26,6 @@ const generateResponse = async (req: Request, res: Response) => {
             role: "system",
             content: "You are a helpful assistant. You don't elaborate much but you're not too brief either.",
         },
-        {
-            role: "user",
-            content: "What lead to the fall of the Roman Empire?"
-        },
         ...conversation,
         newQuestion,
     ];
@@ -37,7 +33,7 @@ const generateResponse = async (req: Request, res: Response) => {
     const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: messages,
-        max_tokens: 100,
+        max_tokens: 200,
         temperature: 0,
         stream: true
     });
@@ -56,18 +52,24 @@ const generateResponse = async (req: Request, res: Response) => {
 
     messages.push({ role: "assistant", content: completeResponse });
 
-    let payload: Prompt = { 
+    let payload: Prompt = {
         title: question,
-        messages: messages.slice(2) 
+        messages: messages.slice(1) 
     };
+    const userId = req.body.currentUser.uid;
 
     if (insightId) {
         payload.insightId = insightId;
-        await updateInsight(req, payload);
+        await updateInsight(userId, payload);
+        return
     }
 
     payload.storeId = storeId
-    await createInsight(req, payload);
+    try {
+        await createInsight(userId, payload);
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-module.exports = { generateResponse }
+// Name all the gods of the Greek Mythology and their roles

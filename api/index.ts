@@ -7,7 +7,6 @@ import {
   storeRoutes, 
   insightRoutes 
 } from "./routes";
-import { testStream } from "./controllers/test.stream";
 
 const app = express();
 
@@ -21,17 +20,24 @@ app.use(cors());
 
 app.use("/api/*", validateUser);
 
-app.get(
-  "/",
-  async (req: Request, res: Response): Promise<Response> => {
-      return res.status(200).send({
-          userId: "dvbvscvdczdv",
-          firstName: "Kyle",
-          lastName: "Michael"
-      });
+app.get("/api/default",
+  async (req: Request, res: Response) => {
+    const { currentUser } = req.body;
+
+    const store = await prisma.store.findUnique({
+      where: {
+        userId: currentUser.uid,
+        storeUrl: "kingbethel.myshopify.com",
+      },
+      select: {
+        storeUrl: true,
+        type: true
+      }
+    });
+
+    res.status(200).send(store);
   }
 );
-app.use("/api/stream", testStream);
 
 app.use("/api/profile", profileRoutes);
 app.use("/api/stores", storeRoutes);

@@ -6,9 +6,8 @@ export const getProfile = async (req: Request, res: Response) => {
 
     try {
         const profile = await prisma.profile.findFirst({
-            where: {
-                userId: currentUser.uid
-            }
+            where: { userId: currentUser.uid },
+            select: { userId: false }
         })
     
         if (!profile) {

@@ -13,7 +13,9 @@ export const getInsights = async (req: Request, res: Response) => {
             },
             orderBy: { updatedAt: 'desc' },
             select: { 
+                id: true,
                 title: true,
+                pinned: true,
                 updatedAt: true
             }
         });
@@ -36,7 +38,9 @@ export const getInsight = async (req: Request, res: Response) => {
             },
             select: {
                 title: true,
-                messages: true
+                messages: true,
+                pinned: true,
+                updatedAt: true
             }
         });
     
@@ -50,18 +54,13 @@ export const getInsight = async (req: Request, res: Response) => {
     }
 }
 
-export const createInsight = async (req: Request, payload: any) => {
-    const { currentUser } = req.body;
-
+export const createInsight = async (userId: string, payload: any) => {
     try {
         const insight = await prisma.insight.create({
             data: {
-                userId: currentUser.uid,
-                ...payload
-            },
-            select: {
-                title: true,
-                messages: true
+                userId,
+                ...payload,
+                pinned: false
             }
         });
     
@@ -71,22 +70,19 @@ export const createInsight = async (req: Request, payload: any) => {
     }
 }
 
-export const updateInsight = async (req: Request, payload: any) => {
-    const { currentUser } = req.body;
+export const updateInsight = async (userId: string, payload: any) => {
     const { insightId } = payload;
 
     delete payload.insightId;
 
     try {
         const insight = await prisma.insight.update({
-            where: {
-                id: insightId,
-                userId: currentUser.uid
-            },
+            where: { id: insightId, userId },
             data: payload,
             select: {
+                id: true,
                 title: true,
-                messages: true
+                updatedAt: true
             }
         });
     
@@ -108,7 +104,8 @@ export const pinInsight = async (req: Request, res: Response) => {
                id: insightId,
                userId: currentUser.uid
             },
-            data: { pinned }
+            data: { pinned },
+            select: { id: true }
         });
         
         res.status(200).send("Success");
