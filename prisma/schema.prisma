@@ -16,7 +16,7 @@ model Profile {
 
 model Store {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    @unique
+  userId    String    
   type      StoreType
   storeUrl  String
   key       String
@@ -45,7 +45,7 @@ type Message {
 
 model Insight {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    @unique
+  userId    String    
   title     String
   messages  Message[]
   pinned    Boolean

@@ -48,7 +48,6 @@ export const generateResponse = async (req: Request, res: Response) => {
             res.write(`${content}`);
         }
     }
-    res.end();
 
     messages.push({ role: "assistant", content: completeResponse });
 
@@ -61,15 +60,16 @@ export const generateResponse = async (req: Request, res: Response) => {
     if (insightId) {
         payload.insightId = insightId;
         await updateInsight(userId, payload);
-        return
+        return res.end();
     }
 
     payload.storeId = storeId
-    try {
-        await createInsight(userId, payload);
-    } catch (error) {
-        console.log(error)
+    const newInsight = await createInsight(userId, payload);
+    if (newInsight) {
+        res.write(`___id: ${(newInsight as any).id}`)
     }
+
+    res.end();
 }
 
 // Name all the gods of the Greek Mythology and their roles

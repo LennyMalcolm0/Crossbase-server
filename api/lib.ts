@@ -35,11 +35,4 @@ export const openai = new OpenAI({
     maxRetries: 2
 });
 
-export const prisma = new PrismaClient()
-
-// export = { 
-//     admin, 
-//     validateUser,
-//     openai,
-//     prisma,
-// }
+export const prisma = new PrismaClient();
