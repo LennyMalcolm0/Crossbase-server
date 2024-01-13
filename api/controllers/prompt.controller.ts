@@ -30,23 +30,13 @@ export const generateResponse = async (req: Request, res: Response) => {
         newQuestion,
     ];
 
-    let isOpen = true;
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    req.on('close', () => {
-        controller.abort();
-        console.log("Aborted");
-        isOpen = false;
-    });
-
     const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: messages,
         max_tokens: 200,
         temperature: 0,
         stream: true
-    }, { signal });
+    });
 
     let completeResponse = "";
 
@@ -58,10 +48,6 @@ export const generateResponse = async (req: Request, res: Response) => {
             res.write(`${content}`);
         }
     }
-
-    if (!isOpen) return;
-    
-    console.log("Code still running");
 
     messages.push({ role: "assistant", content: completeResponse });
 
