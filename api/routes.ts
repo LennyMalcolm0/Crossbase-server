@@ -59,7 +59,7 @@ storeRoutes.delete("/:storeId", deleteStore);
 /** Express router to manage insight routes */
 export const insightRoutes = Router();
 
-insightRoutes.post("/question", 
+insightRoutes.post("/prompt", 
     schemaValidator(promptSchema), 
     generateResponse
 );

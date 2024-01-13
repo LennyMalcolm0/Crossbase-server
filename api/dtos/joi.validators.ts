@@ -48,7 +48,7 @@ export const messageSchema = Joi.object({
     content: Joi.string().required()
 });
 export const promptSchema = Joi.object({
-    question: Joi.string().required(),
+    prompt: Joi.string().required(),
     conversation: Joi.array()
         .items(messageSchema)
         .min(0)

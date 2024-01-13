@@ -24,7 +24,7 @@ app.get("/api/default",
   async (req: Request, res: Response) => {
     const { currentUser } = req.body;
 
-    const store = await prisma.store.findUnique({
+    const store = await prisma.store.findFirst({
       where: {
         userId: currentUser.uid,
         storeUrl: "kingbethel.myshopify.com",
