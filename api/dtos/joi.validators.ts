@@ -37,8 +37,7 @@ export const createStoreSchema = Joi.object({
     type: Joi.string()
         .valid('SHOPIFY', 'AMAZON', 'WOO_COMMERCE', 'GUMROAD')
         .required(),
-    storeUrl: Joi.string().required(),
-    key: Joi.string().required(),
+    url: Joi.string().required(),
 });
 export const updateStoreUrlSchema = Joi.object({
     newStoreUrl: Joi.string().required(),

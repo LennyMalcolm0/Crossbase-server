@@ -6,12 +6,10 @@ export const getStores = async (req: Request, res: Response) => {
 
     try {
         const stores = await prisma.store.findMany({
-            where: {
-                userId: currentUser.uid
-            },
+            where: { userId: currentUser.uid },
             select: {
                 id: true,
-                storeUrl: true,
+                url: true,
                 type: true,
                 updatedAt: true
             }
@@ -35,7 +33,7 @@ export const getStore = async (req: Request, res: Response) => {
             },
             select: {
                 id: true,
-                storeUrl: true,
+                url: true,
                 type: true,
                 updatedAt: true
             }
@@ -52,15 +50,25 @@ export const getStore = async (req: Request, res: Response) => {
 }
 
 export const createStore = async (req: Request, res: Response) => {
-    const { currentUser, ...payload } = req.body;
+    const { currentUser, type, url } = req.body;
+
+    let data: any;
+
+    if (type === "SHOPIFY") {
+        const storeSession = await prisma.shopify_Session.findUnique({
+            where: { shop: url }
+        })
+
+        data = {
+            userId: currentUser.uid,
+            type,
+            url,
+            key: storeSession?.accessToken
+        }
+    }
 
     try {
-        const store = await prisma.store.create({
-            data: {
-                userId: currentUser.uid,
-                ...payload
-            },
-        });
+        const store = await prisma.store.create({ data });
 
         delete (store as any).key
     
@@ -84,12 +92,10 @@ export const updateStoreUrl = async (req: Request, res: Response) => {
                 id: storeId,
                 userId: currentUser.uid
             },
-            data: {
-                storeUrl: newStoreUrl
-            },
+            data: { url: newStoreUrl },
             select: {
                 id: true,
-                storeUrl: true,
+                url: true,
                 type: true,
                 updatedAt: true
             }

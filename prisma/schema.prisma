@@ -19,7 +19,7 @@ model Store {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
   type      StoreType
-  storeUrl  String
+  url       String
   key       String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
@@ -60,7 +60,7 @@ model Insight {
 
 model Shopify_Session {
   id          String   @id @map("_id")
-  shop        String
+  shop        String   @unique
   state       String?
   scope       String?
   accessToken String?

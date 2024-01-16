@@ -27,10 +27,10 @@ app.get("/api/default",
     const store = await prisma.store.findFirst({
       where: {
         userId: currentUser.uid,
-        storeUrl: "kingbethel.myshopify.com",
+        url: "kingbethel.myshopify.com",
       },
       select: {
-        storeUrl: true,
+        url: true,
         type: true
       }
     });
