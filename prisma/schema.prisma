@@ -8,15 +8,16 @@ generator client {
 }
 
 model Profile {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @unique
-  firstName String
-  lastName  String
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @unique
+  firstName   String
+  lastName    String
+  phoneNumber String
 }
 
 model Store {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    
+  userId    String
   type      StoreType
   storeUrl  String
   key       String
@@ -28,9 +29,10 @@ model Store {
 
 enum StoreType {
   SHOPIFY
-  AMAZON
+  AMAZON_FBA
   WOO_COMMERCE
   GUMROAD
+  BIG_COMMERCE
 }
 
 enum Role {
@@ -45,7 +47,7 @@ type Message {
 
 model Insight {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    
+  userId    String
   title     String
   messages  Message[]
   pinned    Boolean
@@ -54,4 +56,15 @@ model Insight {
 
   store   Store  @relation(fields: [storeId], references: [id])
   storeId String @db.ObjectId
+}
+
+model Shopify_Session {
+  id          String   @id @map("_id")
+  shop        String
+  state       String?
+  scope       String?
+  accessToken String?
+  isOnline    Boolean?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

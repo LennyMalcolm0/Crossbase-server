@@ -24,10 +24,12 @@ export function schemaValidator(schema: any) {
 export const createProfileSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
 });
 export const updateProfileSchema = Joi.object({
     firstName: Joi.string().optional(),
     lastName: Joi.string().optional(),
+    phoneNumber: Joi.string().optional(),
 });
 
 // Store schemas

@@ -48,7 +48,7 @@ prisma.$connect;
 const port = process.env.PORT;
 
 try {
-    app.listen(port, () => console.log(`Connected`));
+  app.listen(port, () => console.log(`Connected`));
 } catch (error) {
-    console.error(error);
+  console.error(error);
 } 

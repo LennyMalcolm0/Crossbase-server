@@ -71,5 +71,3 @@ export const generateResponse = async (req: Request, res: Response) => {
 
     res.end();
 }
-
-// Name all the gods of the Greek Mythology and their roles
