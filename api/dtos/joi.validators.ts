@@ -24,7 +24,7 @@ export function schemaValidator(schema: any) {
 export const createProfileSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    phoneNumber: Joi.string().required(),
+    phoneNumber: Joi.string().optional(),
 });
 export const updateProfileSchema = Joi.object({
     firstName: Joi.string().optional(),

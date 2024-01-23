@@ -55,12 +55,19 @@ export const getInsight = async (req: Request, res: Response) => {
 }
 
 export const createInsight = async (userId: string, payload: any) => {
+    const { storeId, ...otherValues } = payload;
+
     try {
         const insight = await prisma.insight.create({
             data: {
                 userId,
-                ...payload,
-                pinned: false
+                ...otherValues,
+                pinned: false,
+                store: {
+                    connect: {
+                        id: storeId
+                    }
+                }
             }
         });
     
@@ -71,14 +78,12 @@ export const createInsight = async (userId: string, payload: any) => {
 }
 
 export const updateInsight = async (userId: string, payload: any) => {
-    const { insightId } = payload;
-
-    delete payload.insightId;
+    const { insightId, ...otherValues } = payload;
 
     try {
         const insight = await prisma.insight.update({
             where: { id: insightId, userId },
-            data: payload,
+            data: otherValues,
             select: {
                 id: true,
                 title: true,

@@ -8,11 +8,11 @@ generator client {
 }
 
 model Profile {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String @unique
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @unique
   firstName   String
   lastName    String
-  phoneNumber String
+  phoneNumber String?
 }
 
 model Store {

@@ -59,6 +59,12 @@ export const createStore = async (req: Request, res: Response) => {
             where: { shop: url }
         })
 
+        if (!storeSession) {
+            return res.status(401).send({ 
+                error: "Store session was not found. Install/Re-install app on your shopify store"
+            });
+        }
+
         data = {
             userId: currentUser.uid,
             type,
@@ -71,6 +77,8 @@ export const createStore = async (req: Request, res: Response) => {
         const store = await prisma.store.create({ data });
 
         delete (store as any).key
+        delete (store as any).userId
+        delete (store as any).createdAt
     
         res.status(200).send(store);
     } catch (error) {
@@ -99,7 +107,7 @@ export const updateStoreUrl = async (req: Request, res: Response) => {
                 type: true,
                 updatedAt: true
             }
-           });
+        });
     
         res.status(200).send(store);
     } catch (error) {
