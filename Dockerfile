@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .
 
-RUN npx prisma generate
+RUN npm run vercel-build
 
 EXPOSE 5000
 
