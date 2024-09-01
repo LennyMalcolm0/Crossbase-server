@@ -18,26 +18,15 @@ app.use(express.json());
 
 app.use(cors());
 
+app.get("/", (_, res) => {
+  res.status(200).send({
+      "name": "Crossbase",
+      "type": "test",
+      "price": 450,
+  });
+})
+
 app.use("/api/*", validateUser);
-
-app.get("/api/insights/prompt",
-  async (req: Request, res: Response) => {
-    // const { currentUser } = req.body;
-
-    // const store = await prisma.store.findFirst({
-    //   where: {
-    //     userId: currentUser.uid,
-    //     url: "kingbethel.myshopify.com",
-    //   },
-    //   select: {
-    //     url: true,
-    //     type: true
-    //   }
-    // });
-
-    res.status(200).send("store");
-  }
-);
 
 app.use("/api/profile", profileRoutes);
 app.use("/api/stores", storeRoutes);
