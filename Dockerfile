@@ -10,8 +10,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm run vercel-build
-
 EXPOSE 5000
 
 CMD [ "npm", "run", "dev" ]
