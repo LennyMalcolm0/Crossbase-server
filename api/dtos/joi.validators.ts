@@ -54,6 +54,6 @@ export const promptSchema = Joi.object({
         .items(messageSchema)
         .min(0)
         .required(),
-    storeId: Joi.string().required(),
+    storeId: Joi.string().optional(),
     insightId: Joi.string().optional(),
 });

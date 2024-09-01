@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
-import { OpenAI } from 'openai';
 import { PrismaClient } from '@prisma/client';
+import Groq from "groq-sdk";
 
 const serviceAccount: ServiceAccount = {
     projectId: process.env.FIREBASE_PROJECT_ID,
@@ -30,9 +30,6 @@ export const validateUser = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
-export const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    maxRetries: 2
-});
-
 export const prisma = new PrismaClient();
+
+export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });

@@ -20,11 +20,13 @@ model Store {
   userId    String
   type      StoreType
   url       String
-  key       String
+  key       String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 
   insights Insight[]
+
+  @@unique([userId, key])
 }
 
 enum StoreType {

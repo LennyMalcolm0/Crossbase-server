@@ -20,22 +20,22 @@ app.use(cors());
 
 app.use("/api/*", validateUser);
 
-app.get("/api/default",
+app.get("/api/insights/prompt",
   async (req: Request, res: Response) => {
-    const { currentUser } = req.body;
+    // const { currentUser } = req.body;
 
-    const store = await prisma.store.findFirst({
-      where: {
-        userId: currentUser.uid,
-        url: "kingbethel.myshopify.com",
-      },
-      select: {
-        url: true,
-        type: true
-      }
-    });
+    // const store = await prisma.store.findFirst({
+    //   where: {
+    //     userId: currentUser.uid,
+    //     url: "kingbethel.myshopify.com",
+    //   },
+    //   select: {
+    //     url: true,
+    //     type: true
+    //   }
+    // });
 
-    res.status(200).send(store);
+    res.status(200).send("store");
   }
 );
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../lib";
+import { groq, prisma } from "../lib";
 
 export const getStores = async (req: Request, res: Response) => {
     const { currentUser } = req.body;
@@ -51,27 +51,48 @@ export const getStore = async (req: Request, res: Response) => {
 
 export const createStore = async (req: Request, res: Response) => {
     const { currentUser, type, url } = req.body;
+  
+    const response = await groq.chat.completions.create({
+        model: "llama-3.1-70b-versatile",
+        messages: [
+            {
+                role: "system",
+                content: "You are a helpful assistant. You don't elaborate, you go straight to the point.",
+            },
+            {
+                role: "user",
+                content: "Generate a random domain name in lowercase letters"
+            }
+        ],
+        max_tokens: 2000,
+        temperature: 1,
+    });
 
-    let data: any;
+    const data = {
+        userId: currentUser.uid,
+        type,
+        url: response.choices[0].message.content || Math.random().toString() + ".com",
+        key: Math.random().toString()
+    };
 
-    if (type === "SHOPIFY") {
-        const storeSession = await prisma.shopify_Session.findUnique({
-            where: { shop: url }
-        })
+    // if (type === "SHOPIFY") {
+    //     const storeSession = await prisma.shopify_Session.findUnique({
+    //         where: { shop: url }
+    //     })
 
-        if (!storeSession) {
-            return res.status(401).send({ 
-                error: "Store session was not found. Install/Re-install app on your shopify store"
-            });
-        }
+    //     if (!storeSession) {
+    //         return res.status(401).send({ 
+    //             error: "Store session was not found. Install/Re-install app on your shopify store"
+    //         });
+    //     }
 
-        data = {
-            userId: currentUser.uid,
-            type,
-            url,
-            key: storeSession?.accessToken
-        }
-    }
+    //     data = {
+    //         userId: currentUser.uid,
+    //         type,
+    //         url,
+    //         key: storeSession?.accessToken
+    //     }
+    // }
 
     try {
         const store = await prisma.store.create({ data });
